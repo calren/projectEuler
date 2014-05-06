@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class primePermutations {
@@ -11,43 +12,48 @@ public class primePermutations {
 	 * 
 	 * What 12-digit number do you form by concatenating the three terms in this sequence?
 	 */
+    
 	public static void main(String[] args) {
-		ArrayList<Integer> uniquePrimes = getAllUniqueFourDigitPrimes();
-		
-		for (int i = 0; i < uniquePrimes.size(); i++) {
-			int currentPrime = uniquePrimes.get(i);
-		
-			for (int j = 1 +1; j < i ; j++) {
-				if (isPalindrome(currentPrime, uniquePrimes.get(j))) {
-					System.out.println(currentPrime);
-					System.out.println(uniquePrimes.get(j));
-				}
-			}
-		}
+	    ArrayList<Integer> primes = getFourDigitPrimes();
+	    int[] ret = new int[3];
+	    for (int j = 0 ; j < primes.size(); j++) {
+	        int num = primes.get(j);
+	        ret[0] = num;
+	        
+	        for (int i = j+1; i < primes.size(); i++) {
+	            if (isPermutation(num, primes.get(i))) {
+	                ret[1] = primes.get(i);
+	                for (int k = i + 1; k < primes.size(); k++) {
+	                    if (isPermutation(num, primes.get(k))) {
+	                        ret[2] = primes.get(k);
+	                        if (ret[2] - ret[1] == ret[1] - ret[0]) {
+	                            System.out.println(ret[0]);
+	                            System.out.println(ret[1]);
+	                            System.out.println(ret[2]);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+
+	    }
+	    	    
 	}
 	
-	public static boolean isPalindrome(int n, int j) {
-		String num1 = Integer.toString(n);
-		String num2 = Integer.toString(j);
-		if ( 	num2.contains(Character.toString(num1.charAt(0)))
-				&& num2.contains(Character.toString(num1.charAt(1)))
-				&& num2.contains(Character.toString(num1.charAt(2)))
-				&& num2.contains(Character.toString(num1.charAt(3)))
-				) {
-			return true;
+	public static boolean isPermutation(int n, int j) {
+	    
+	    boolean[] num1 = new boolean[10];
+	    boolean[] num2 = new boolean[10];
+	    
+		String numN = Integer.toString(n);
+		String numJ = Integer.toString(j);
+		
+		for (int i = 0; i < 4; i++) {
+		    num1[Integer.parseInt(Character.toString(numN.charAt(i)))] = true;
+		    num2[Integer.parseInt(Character.toString(numJ.charAt(i)))] = true;
 		}
-		return false;
-	}
-	
-	public static ArrayList<Integer> getAllUniqueFourDigitPrimes() {
-		ArrayList<Integer> primes = getFourDigitPrimes();
-		ArrayList<Integer> uniquePrimes = new ArrayList<Integer>();
-		for (int i : primes) {
-			if (isUnique(i)) {
-				uniquePrimes.add(i);
-			}
-		}
-		return uniquePrimes;
+
+		return Arrays.equals(num1, num2);
 	}
 	
 	public static ArrayList<Integer> getFourDigitPrimes() {
@@ -59,16 +65,6 @@ public class primePermutations {
 		}
 		
 		return primes;
-	}
-
-	public static boolean isUnique(int n) {
-		String s = Integer.toString(n);
-		for (int i = 0; i < s.length(); i++) {
-			if (s.substring(i+1).contains(Character.toString(s.charAt(i)))) {
-				return false;
-			}
-		}
-		return true;
 	}
 	
 	public static boolean isPrime(int n) {
