@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 
-public class evenfib {
+public class p02_Evenfib {
 
 	/**
 	 * By considering the terms in the Fibonacci sequence whose values do not exceed four million
